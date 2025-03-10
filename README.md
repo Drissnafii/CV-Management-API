@@ -6,7 +6,7 @@ Cette API pour une plateforme de candidature d'emploi est développée avec Lara
 ## 🛠️ Technologies Utilisées
 - **Framework** : Laravel 11 / PHP 8.3
 - **Authentification** : JWT / Laravel Sanctum
-- **Base de données** : MySQL / PostgreSQL
+- **Base de données** : MySQL
 - **Queues** : Redis / Database
 - **Stockage des CVs** : AWS S3 / DigitalOcean Spaces / Local Storage
 - **Tests** : PHPUnit / Pest (Bonus)
