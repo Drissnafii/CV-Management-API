@@ -4,13 +4,13 @@
 Cette API pour une plateforme de candidature d'emploi est développée avec Laravel 11. Elle permet la gestion des candidatures, offres d'emploi et CVs avec un traitement asynchrone pour améliorer les performances.
 
 ## 🛠️ Technologies Utilisées
-- **Framework** : Laravel 11 / PHP 8.3
+- **Framework** : Laravel 12 / PHP 8.3
 - **Authentification** : JWT / Laravel Sanctum
 - **Base de données** : MySQL
 - **Queues** : Redis / Database
 - **Stockage des CVs** : AWS S3 / DigitalOcean Spaces / Local Storage
 - **Tests** : PHPUnit / Pest (Bonus)
-- **Documentation API** : Swagger/OpenAPI / Postman
+- **Documentation API** : Swagger / OpenAPI / Postman
 
 ## 📐 Architecture
 L'API suit une architecture RESTful avec :
