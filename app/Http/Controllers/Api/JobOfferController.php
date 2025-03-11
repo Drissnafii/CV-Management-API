@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\JobOffer;
 use Illuminate\Http\Request;
 
 class JobOfferController extends Controller
@@ -12,7 +13,11 @@ class JobOfferController extends Controller
      */
     public function index()
     {
-        //
+        $jobOffers = JobOffer::paginate(10);
+        return response()->json([
+            'status' => 'success',
+            'data' => $jobOffers
+        ]);
     }
 
     /**
@@ -20,7 +25,7 @@ class JobOfferController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
