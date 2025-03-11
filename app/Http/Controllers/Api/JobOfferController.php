@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\JobOffer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class JobOfferController extends Controller
 {
@@ -48,7 +49,7 @@ class JobOfferController extends Controller
             'location' => $request->location,
             'category' => $request->category,
             'contact_type' => $request->contact_type,
-            'recruiter_id' => Auth::user()->id
+            'recruiter_id' => Auth::id()
         ]);
 
         return response()->json([
