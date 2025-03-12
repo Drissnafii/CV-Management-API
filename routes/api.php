@@ -25,7 +25,7 @@ Route::get('/job-offers', [JobOfferController::class, 'index']);
 Route::get('/job-offers/{id}', [JobOfferController::class, 'show']);
 
 // Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group( function () {
     // Job Offers routes
     Route::post('/job-offers', [JobOfferController::class, 'store']);
     Route::put('/job-offers/{id}', [JobOfferController::class, 'update']);

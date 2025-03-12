@@ -49,7 +49,7 @@ class JobOfferController extends Controller
             'location' => $request->location,
             'category' => $request->category,
             'contact_type' => $request->contact_type,
-            'recruiter_id' => Auth::id()
+            'recruiter_id' => Auth::user()->id
         ]);
 
         return response()->json([
@@ -63,15 +63,15 @@ class JobOfferController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
         $jobOffer = JobOffer::findOrFail($id);
 
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Job offer not found',
-                'data' => $jobOffer
-            ],404);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'job exist 😊👌',
+            'data' => $jobOffer
+        ], 200);
     }
 
     /**
@@ -133,5 +133,5 @@ class JobOfferController extends Controller
             'status' => 'success',
             'message' => 'Job offer delete successfully'
         ]);
-    }
+        }
 }

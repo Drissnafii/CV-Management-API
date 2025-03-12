@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('location');
             $table->string('category');
-            $table->string('contract_type');
+            $table->string('contact_type');
             $table->unsignedBigInteger('recruiter_id');
             $table->timestamps();
 
