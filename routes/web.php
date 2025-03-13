@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
@@ -63,4 +64,18 @@ Route::get('/test-cloud-storage', function () {
             ]
         ], 500);
     }
+});
+
+Route::get('/download-cv/{cv}', function (\App\Models\CV $cv) {
+    if ($cv->user_id !== Auth::id()) {
+        abort(403, 'Unauthorized access to CV');
+    }
+
+    $filePath = Storage::disk('local')->path($cv->file_path);
+
+    if (!file_exists($filePath)) {
+        abort(404, 'File not found');
+    }
+
+    return response()->download($filePath, $cv->file_name);
 });
