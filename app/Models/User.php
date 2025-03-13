@@ -49,8 +49,11 @@ class User extends Authenticatable
         ];
     }
 
-    // In User.php
     public function jobOffers(){
         return $this->hasMany(JobOffer::class, 'recruiter_id');
+    }
+
+    public function cvs() {
+        return $this->hasMany(CV::class);
     }
 }
