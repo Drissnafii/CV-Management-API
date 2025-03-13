@@ -1,0 +1,57 @@
+sequenceDiagram
+    participant C as Candidate
+    participant FE as Frontend
+    participant API as API (Laravel)
+    participant DB as Database
+    participant Q as Queue (Redis/DB)
+    participant S as Storage (S3/DO)
+    participant M as Mail Service
+
+    %% User Authentication
+    C->>FE: Register/Login
+    FE->>API: POST /api/auth/register or /login
+    API->>DB: Store user / Verify credentials
+    API-->>FE: Return JWT/Sanctum token
+    FE-->>C: Show authenticated state
+
+    %% CV Upload
+    C->>FE: Upload CV
+    FE->>API: POST /api/cvs (multipart/form-data)
+    API->>S: Store CV file
+    API->>DB: Save CV metadata & path
+    API-->>FE: Return CV information
+    FE-->>C: Show CV added to profile
+
+    %% Apply for a Single Job
+    C->>FE: Apply for job
+    FE->>API: POST /api/applications
+    API->>DB: Create application record
+    API->>Q: Dispatch confirmation email job
+    API-->>FE: Return application confirmation
+    FE-->>C: Show application submitted
+    Q->>M: Send confirmation email
+    M-->>C: Receive application confirmation email
+
+    %% Apply for Multiple Jobs
+    C->>FE: Select multiple jobs
+    FE->>API: POST /api/batch-applications
+    API->>Q: Dispatch batch processing job
+    API-->>FE: Return batch job accepted
+    FE-->>C: Show batch processing started
+
+    Q->>API: Process each application
+    loop For each job ID
+        API->>DB: Create application record
+        API->>Q: Dispatch confirmation email job
+    end
+
+    Q->>M: Send batch confirmation email
+    M-->>C: Receive batch application confirmation
+
+    %% Periodic CSV Export
+    Note over Q,M: Weekly scheduled task
+    Q->>API: Trigger CSV export job
+    API->>DB: Fetch recent applications
+    API->>S: Generate & store CSV
+    API->>M: Send CSV to recruiters
+    M-->>API: Email delivered
