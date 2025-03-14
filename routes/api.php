@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobOfferController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\JobApplicationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -43,7 +44,6 @@ Route::get('/test' , function(){
 // use App\Http\Controllers\Api\JobOfferController;
 // use App\Http\Controllers\Api\AuthController;
 // use App\Http\Controllers\Api\CVController;
-use App\Http\Controllers\Api\JobApplicationController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -52,18 +52,18 @@ Route::get('/job-offers', [JobOfferController::class, 'index']);
 Route::get('/job-offers/{id}', [JobOfferController::class, 'show']);
 
 // Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+// Route::middleware('auth:sanctum')->group(function () {
     // Job Offers routes
-    Route::post('/job-offers', [JobOfferController::class, 'store']);
-    Route::put('/job-offers/{id}', [JobOfferController::class, 'update']);
-    Route::delete('/job-offers/{id}', [JobOfferController::class, 'destroy']);
+    // Route::post('/job-offers', [JobOfferController::class, 'store']);
+    // Route::put('/job-offers/{id}', [JobOfferController::class, 'update']);
+    // Route::delete('/job-offers/{id}', [JobOfferController::class, 'destroy']);
 
     // CV routes
-    Route::get('/cvs', [CVController::class, 'index']);
-    Route::post('/cvs', [CVController::class, 'store']);
-    Route::get('/cvs/{id}', [CVController::class, 'show']);
-    Route::delete('/cvs/{id}', [CVController::class, 'destroy']);
-    Route::get('/cvs/{id}/download', [CVController::class, 'download']);
+    // Route::get('/cvs', [CVController::class, 'index']);
+    // Route::post('/cvs', [CVController::class, 'store']);
+    // Route::get('/cvs/{id}', [CVController::class, 'show']);
+    // Route::delete('/cvs/{id}', [CVController::class, 'destroy']);
+    // Route::get('/cvs/{id}/download', [CVController::class, 'download']);
 
     // Job Application routes
     // Route::get('/applications', [JobApplicationController::class, 'index']);
@@ -73,5 +73,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::post('/applications/batch', [JobApplicationController::class, 'batchApply']);
 
     // Logout route
-    Route::post('/logout', [AuthController::class, 'logout']);
+    // Route::post('/logout', [AuthController::class, 'logout']);
+// });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/cvs', [App\Http\Controllers\Api\CVController::class, 'store']);
+    Route::get('/cvs/{id}/download', [App\Http\Controllers\Api\CVController::class, 'download']);
+    Route::post('/applications', [\App\Http\Controllers\JobApplicationController::class, 'store']);
 });

@@ -35,7 +35,7 @@ class CVController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'cv_file' => 'required|file|mimes:pdf,docx|max:5120',
+            'cv_file' => 'required|file|mimes:pdf,docx|max:5120', // 5MB max
         ]);
 
         if ($validator->fails()) {
@@ -48,21 +48,17 @@ class CVController extends Controller
         $file = $request->file('cv_file');
         $fileName = time() . '_' . Str::slug($request->title) . '.' . $file->getClientOriginalExtension();
 
-        // Get authenticated user ID
-        $userId = Auth::id();
-
         // Store file locally
-        $filePath = Storage::disk('local')->put("cvs/{$userId}", $file);
+        $filePath = $file->storeAs('cvs/' . Auth::id(), $fileName, 'public');
 
         $cv = CV::create([
-            'user_id' => $userId,
+            'user_id' => Auth::id(),
             'title' => $request->title,
             'file_path' => $filePath,
             'file_name' => $fileName,
+            'file_type' => $file->getClientMimeType(),
             'file_size' => $file->getSize()
         ]);
-
-        // ProcessCVFile::dispatch($cv);
 
         return response()->json([
             'status' => 'success',
@@ -70,6 +66,7 @@ class CVController extends Controller
             'data' => $cv
         ], 201);
     }
+
 
         public function show(CV $cv)
         {
