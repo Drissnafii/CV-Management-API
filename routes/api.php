@@ -79,5 +79,5 @@ Route::get('/job-offers/{id}', [JobOfferController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cvs', [App\Http\Controllers\Api\CVController::class, 'store']);
     Route::get('/cvs/{id}/download', [App\Http\Controllers\Api\CVController::class, 'download']);
-    Route::post('/applications', [\App\Http\Controllers\JobApplicationController::class, 'store']);
+    Route::post('/applications', [JobApplicationController::class, 'store']);
 });
