@@ -45,7 +45,7 @@ class CVControllerTest extends TestCase
             'title' => 'Test CV',
         ]);
 
-        Storage::disk('local')->assertExists("cvs/{$user->id}/" . $file->hashName());
+        $this->assertTrue(Storage::disk('local')->exists("cvs/{$user->id}/" . $file->hashName()));
     }
 
 
