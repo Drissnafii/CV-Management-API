@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCVRequest;
 use App\Models\CV;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -32,29 +33,19 @@ class CVController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreCVRequest $storeCVRequest)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'cv_file' => 'required|file|mimes:pdf,docx|max:5120', // 5MB max
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $file = $request->file('cv_file');
-        $fileName = time() . '_' . Str::slug($request->title) . '.' . $file->getClientOriginalExtension();
+        // all the store request
+        
+        $file = $storeCVRequest->file('cv_file');
+        $fileName = time() . '_' . Str::slug($storeCVRequest->title) . '.' . $file->getClientOriginalExtension();
 
         // Store file locally
         $filePath = $file->storeAs('cvs/' . Auth::id(), $fileName, 'public');
 
         $cv = CV::create([
             'user_id' => Auth::id(),
-            'title' => $request->title,
+            'title' => $storeCVRequest->title,
             'file_path' => $filePath,
             'file_name' => $fileName,
             'file_type' => $file->getClientMimeType(),
