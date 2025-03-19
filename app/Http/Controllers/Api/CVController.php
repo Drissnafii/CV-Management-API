@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Requests\StoreCVRequest;
 use App\Http\Requests\UpdateCVRequest;
 use App\Models\CV;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-
 class CVController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
         $user = Auth::user();
@@ -75,48 +75,44 @@ class CVController extends Controller
         ]);
     }
 
-    public function update(UpdateCVRequest $request, CV $cv)
-    {
-        // La vérification de l'existence du CV n'est plus nécessaire
-        // car le Route Model Binding renverra une erreur 404 si le CV n'est pas trouvé.
-        // Utilisation de la politique d'autorisation
-        if (Gate::denies('update', $cv)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized access to CV'
-            ], 403);
-        }
+public function update(UpdateCVRequest $request, CV $cv)
+{
+    // La vérification de l'existence du CV n'est plus nécessaire
+    // car le Route Model Binding renverra une erreur 404 si le CV n'est pas trouvé.
 
-        // Mise à jour du titre si présent
-        if ($request->has('title')) {
-            $cv->title = $request->title;
-        }
+    // Utilisation de la politique d'autorisation
+    $this->authorize('update', $cv);
 
-        // Gestion de la mise à jour du fichier
-        if ($request->hasFile('cv_file')) {
-            $path_of_cv = $cv->file_path;
-            if (Storage::disk('public')->exists($path_of_cv)) {
-                Storage::disk('public')->delete($path_of_cv);
-            }
-
-            $file = $request->file('cv_file');
-            $fileName = time() . '_' . Str::slug($request->title ?? $cv->title) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('cvs/' . Auth::id(), $fileName, 'public');
-
-            $cv->file_path = $filePath;
-            $cv->file_name = $fileName;
-            $cv->file_type = $file->getClientMimeType();
-            $cv->file_size = $file->getSize();
-        }
-
-        $cv->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'CV updated successfully',
-            'data' => $cv
-        ]);
+    // Mise à jour du titre si présent
+    if ($request->has('title')) {
+        $cv->title = $request->title;
     }
+
+    // Gestion de la mise à jour du fichier
+    if ($request->hasFile('cv_file')) {
+        $path_of_cv = $cv->file_path;
+        if (Storage::disk('public')->exists($path_of_cv)) {
+            Storage::disk('public')->delete($path_of_cv);
+        }
+
+        $file = $request->file('cv_file');
+        $fileName = time() . '_' . Str::slug($request->title ?? $cv->title) . '.' . $file->getClientOriginalExtension();
+        $filePath = $file->storeAs('cvs/' . Auth::id(), $fileName, 'public');
+
+        $cv->file_path = $filePath;
+        $cv->file_name = $fileName;
+        $cv->file_type = $file->getClientMimeType();
+        $cv->file_size = $file->getSize();
+    }
+
+    $cv->save();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'CV updated successfully',
+        'data' => $cv
+    ]);
+}
 
 
     public function destroy(CV $cv)
