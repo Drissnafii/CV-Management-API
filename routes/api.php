@@ -31,9 +31,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/job-offers/{id}', [JobOfferController::class, 'destroy']); // working
 
     // CV routes
+    Route::get('/cvs', [CVController::class, 'index']); // working
     Route::post('/cvs', [CVController::class, 'store']); // success in the local storage of laravel
     Route::get('/cvs/{id}/download', [CVController::class, 'download']); // sucess and fixed
-    Route::put('/cvs/{id}', [CVController::class, 'update']);
+    Route::put('/cvs/{id}', [CVController::class, 'update']); // working
+    Route::delete('/cvs/{id}', [CVController::class, 'destroy']);
 
     // Job Application routes
     Route::post('/applications', [JobApplicationController::class, 'store']);

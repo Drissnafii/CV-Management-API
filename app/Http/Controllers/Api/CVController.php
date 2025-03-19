@@ -75,44 +75,41 @@ class CVController extends Controller
 
     public function update(Request $request, $id)   {
 
-        // find the user
+        // find the CV
         $cv = CV::find($id);
 
-        // check if the CV existes
+        // check if the CV exists
         if (!$cv) {
-            # code...
             return response()->json([
                 'status' => 'error',
-                'message' => 'CV not fount'
+                'message' => 'CV not found'
             ], 404);
         }
 
-        // Check if the authentificated user owns the CV
+        // Check if the authenticated user owns the CV
         if ($cv->user_id !== Auth::id()) {
-            # code...
             return response()->json([
                 'status' => 'error',
-                'message' => 'Unouthorized acces to CV'
-            ], 404);
+                'message' => 'Unauthorized access to CV'
+            ], 403);
         }
 
         // Validate the request data
         $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            'cv_file' => 'sometimes|required|file|mimes:pdf, doc, docx|max:5120'
+            'cv_file' => 'sometimes|required|file|mimes:pdf,doc,docx|max:5120'
         ]);
 
         // Update CV details
         if ($request->has('title')) {
-            # code...
             $cv->title = $request->title;
         }
 
         // Check if the new file is updated
         if($request->hasFile('cv_file')) {
             $path_of_cv = $cv->file_path;
-            if (Storage::disk('public')->exists( $path_of_cv)) {
-                # code... => delelte the old file if exists
+            if (Storage::disk('public')->exists($path_of_cv)) {
+                // Delete the old file if exists
                 Storage::disk('public')->delete($path_of_cv);
             }
             // Store the new file
@@ -125,7 +122,7 @@ class CVController extends Controller
             // Update our CV with new file info
             $cv->file_path = $filePath;
             $cv->file_name = $fileName;
-            $cv->file_type = $file->getClientOriginalExtension();
+            $cv->file_type = $file->getClientMimeType();
             $cv->file_size = $file->getSize();
         }
 
@@ -151,8 +148,8 @@ class CVController extends Controller
         }
 
         // Delete file from local storage
-        if (Storage::disk('local')->exists($cv->file_path)) {
-            Storage::disk('local')->delete($cv->file_path);
+        if (Storage::disk('public')->exists($cv->file_path)) {
+            Storage::disk('public')->delete($cv->file_path);
         }
 
         $cv->delete();
