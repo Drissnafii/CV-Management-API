@@ -8,30 +8,30 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobApplicationController;
 
 // Public routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/job-offers', [JobOfferController::class, 'index']);
-Route::get('/job-offers/{id}', [JobOfferController::class, 'show']);
+Route::post('/register', [AuthController::class, 'register']); // tested
+Route::post('/login', [AuthController::class, 'login']); // tested
+Route::get('/job-offers', [JobOfferController::class, 'index']); // working
+Route::get('/job-offers/{id}', [JobOfferController::class, 'show']); // working
 
 // Test route
 Route::get('/test', fn() => [
-    "name" => "ikdsb",
-    "prenom" => "ikdsb",
+    "name" => "driss",
+    "prenom" => "nafii",
     "age" => 8790
 ]);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // User route
-    Route::get('/user', fn(Request $request) => $request->user());
+    Route::get('/user', fn(Request $request) => $request->user()); // working
 
     // Job Offers routes
-    Route::post('/job-offers', [JobOfferController::class, 'store']);
-    Route::put('/job-offers/{id}', [JobOfferController::class, 'update']);
-    Route::delete('/job-offers/{id}', [JobOfferController::class, 'destroy']);
+    Route::post('/job-offers', [JobOfferController::class, 'store']); // working
+    Route::put('/job-offers/{id}', [JobOfferController::class, 'update']); // working | err: canot update a foreignkey ... (this should be handeled next time)
+    Route::delete('/job-offers/{id}', [JobOfferController::class, 'destroy']); // working
 
     // CV routes
-    Route::post('/cvs', [CVController::class, 'store']);
+    Route::post('/cvs', [CVController::class, 'store']); // success in the local storage of laravel
     Route::get('/cvs/{id}/download', [CVController::class, 'download']);
 
     // Job Application routes

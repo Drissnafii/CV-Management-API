@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CVController extends Controller
 {
@@ -109,23 +110,46 @@ class CVController extends Controller
         }
 
 
-        public function download(CV $cv)
+        public function download($id)
         {
+            if (!Auth::check()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Not authenticated'
+                ], 401);
+            }
+
+            // Find CV
+            $cv = CV::find($id);
+
+            // Check if the cv exists
+            if (!$cv) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'CV not found'
+                ], 404);
+            }
+
             // Check if the authenticated user owns the CV
             if ($cv->user_id !== Auth::id()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Unauthorized access to CV'
+                    'message' => 'Unauthorized access to CV',
+                    'debug' => [
+                        'cv_user_id' => $cv->user_id,
+                        'auth_user_id' => Auth::id()
+                    ]
                 ], 403);
             }
 
-            // Generate a download URL for the local file
-            $filePath = Storage::disk('local')->path($cv->file_path);
+            // Generate a download URL for the file - use public disk to match where files are stored
+            $filePath = Storage::disk('public')->path($cv->file_path);
 
             if (!file_exists($filePath)) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'File not found'
+                    'message' => 'File not found',
+                    'path' => $cv->file_path
                 ], 404);
             }
 
