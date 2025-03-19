@@ -14,20 +14,16 @@ Route::get('/job-offers', [JobOfferController::class, 'index']);
 Route::get('/job-offers/{id}', [JobOfferController::class, 'show']);
 
 // Test route
-Route::get('/test', function () {
-    return [
-        "name" => "ikdsb",
-        "prenom" => "ikdsb",
-        "age" => 8790
-    ];
-});
+Route::get('/test', fn() => [
+    "name" => "ikdsb",
+    "prenom" => "ikdsb",
+    "age" => 8790
+]);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // User route
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/user', fn(Request $request) => $request->user());
 
     // Job Offers routes
     Route::post('/job-offers', [JobOfferController::class, 'store']);
