@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\JobOffer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class JobOfferController extends Controller
 {
