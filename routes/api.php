@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // CV routes
     Route::post('/cvs', [CVController::class, 'store']); // success in the local storage of laravel
-    Route::get('/cvs/{id}/download', [CVController::class, 'download']);
+    Route::get('/cvs/{id}/download', [CVController::class, 'download']); // sucess and fixed
 
     // Job Application routes
     Route::post('/applications', [JobApplicationController::class, 'store']);
