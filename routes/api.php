@@ -9,10 +9,10 @@ use App\Http\Controllers\Api\JobApplicationController;
 use Illuminate\Support\Facades\Auth;
 
 // Public routes
-Route::post('auth/register', [AuthController::class, 'register']);
-Route::post('auth/login', [AuthController::class, 'login']);
-Route::get('/job-offers', [JobOfferController::class, 'index']);
-Route::get('/job-offers/{id}', [JobOfferController::class, 'show']);
+Route::post('auth/register', [AuthController::class, 'register']); // tested
+Route::post('auth/login', [AuthController::class, 'login']); // tested
+Route::get('/job-offers', [JobOfferController::class, 'index']); // tested
+Route::get('/job-offers/{id}', [JobOfferController::class, 'show']); // tested
 
 // Test route
 Route::get('/test', fn() => [

@@ -15,6 +15,14 @@ class CVPolicy
         //
     }
 
+    public function view(User $user, CV $cv) {
+        return $user ->id === $cv->user->id;
+    }
+
+    public function delete(User $user, CV $cv) {
+        return $user ->id === $cv->user->id;
+    }
+
     public function update(User $user, CV $cv) {
         return $user->id === $cv->user_id;
     }
