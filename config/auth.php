@@ -42,7 +42,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'jwt',
+            'driver' => 'jwt',  // from here Laravel star checking if the request has a valid JWT or not !
             'provider' => 'users',
         ],
     ],
