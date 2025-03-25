@@ -72,4 +72,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class)->withTimestamps();
+    }
 }

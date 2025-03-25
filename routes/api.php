@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CVController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SkillController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\JobOfferController;
@@ -48,4 +49,10 @@ Route::middleware('auth.jwt')->group(function () {
 
     // Job Application routes
     Route::post('/applications', [JobApplicationController::class, 'store']);
+
+    // Skills
+
+    Route::post('users/{user}/skills', [SkillController::class, 'attachSkill']);
+    Route::delete('users/{user}/skills', [SkillController::class, 'detachSkill']);
+    Route::put('users/{user}/skills', [SkillController::class, 'syncSkills']);
 });
