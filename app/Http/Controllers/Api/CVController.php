@@ -185,6 +185,7 @@ public function update(UpdateCVRequest $request, CV $cv)
 
         return response()->json([
             'status' => 'success',
+            'message' => 'Here is the Link of Your CV 🎉',
             'download_url' => $downloadUrl
         ]);
     }
