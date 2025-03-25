@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\Api\CVController;
-use App\Http\Controllers\Api\JobOfferController;
-use App\Http\Controllers\Api\JobApplicationController;
+use App\Http\Controllers\JobOfferController;
+use App\Http\Controllers\JobApplicationController;
 
 /*
 |--------------------------------------------------------------------------
